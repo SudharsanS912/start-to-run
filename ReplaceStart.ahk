@@ -301,7 +301,12 @@ VKDown() {
 
 KeyUp(key) {
     global pressedKeys
-    pressedKeys.Delete(key)
+    try {
+        pressedKeys.Delete(key)
+    }
+    catch {
+        ; Key wasn't in the map, ignore
+    }
     Send "{" key " up}"
 }
 
