@@ -272,7 +272,7 @@ InstallKeybdHook()
 ; --- Function keys swap ---
 func_keys := Map()
 
-func_keys["F1"] := "Launch_Media"
+func_keys["F1"] := "\\#g"
 func_keys["F2"] := "Volume_Down"
 func_keys["F3"] := "Volume_Up"
 func_keys["F4"] := "Volume_Mute"
@@ -352,6 +352,9 @@ KeyDown(key) {
 FuncKeyDown(key) {
     global is_hotkey_mode_fn, func_keys
     if (!checkIsHotkey()) {
+        if (!func_keys.Has("\\")) {
+            Send SubStr(func_keys[key], 3)
+        }
         Send "{" func_keys[key] " down}"
     }
     else {
