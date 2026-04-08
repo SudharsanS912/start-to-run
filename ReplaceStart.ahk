@@ -352,10 +352,12 @@ KeyDown(key) {
 FuncKeyDown(key) {
     global is_hotkey_mode_fn, func_keys
     if (!checkIsHotkey()) {
-        if (!func_keys.Has("\\")) {
+        if (InStr(func_keys[key], "\\")) {
             Send SubStr(func_keys[key], 3)
         }
-        Send "{" func_keys[key] " down}"
+        else{
+            Send "{" func_keys[key] " down}"
+        }
     }
     else {
         is_hotkey_mode_fn := true
