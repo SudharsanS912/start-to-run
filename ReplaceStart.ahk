@@ -4,20 +4,7 @@ pressedKeys := Map()
 vk_down := false
 is_hotkey_mode := false
 is_hotkey_mode_fn := false
-func_keys := Map()
 
-func_keys["F1"] := "Launch_Media"
-func_keys["F2"] := "Volume_Down"
-func_keys["F3"] := "Volume_Up"
-func_keys["F4"] := "Volume_Mute"
-func_keys["F5"] := "Media_Stop"
-func_keys["F6"] := "Media_Prev"
-func_keys["F7"] := "Media_Play_Pause"
-func_keys["F8"] := "Media_Next"
-func_keys["F9"] := "Launch_Mail"
-func_keys["F10"] := "Browser_Home"
-func_keys["F11"] := "F11"
-func_keys["F12"] := "Launch_App2"
 ; Hook all keyboard input
 InstallKeybdHook()
 
@@ -280,7 +267,35 @@ InstallKeybdHook()
 ; Your trigger key
 ~*VKE8 up::VKUp()
 
+; =========================
 
+; --- Function keys swap ---
+func_keys := Map()
+
+func_keys["F1"] := "Launch_Media"
+func_keys["F2"] := "Volume_Down"
+func_keys["F3"] := "Volume_Up"
+func_keys["F4"] := "Volume_Mute"
+func_keys["F5"] := "Media_Stop"
+func_keys["F6"] := "Media_Prev"
+func_keys["F7"] := "Media_Play_Pause"
+func_keys["F8"] := "Media_Next"
+func_keys["F9"] := "Launch_Mail"
+func_keys["F10"] := "Browser_Home"
+func_keys["F11"] := "F11"
+func_keys["F12"] := "Launch_App2"
+
+Launch_Media::F1
+Volume_Down::F2
+Volume_Up::F3
+Volume_Mute::F4
+Media_Stop::F5
+Media_Prev::F6
+Media_Play_Pause::F7
+Media_Next::F8
+Launch_Mail::F9
+Browser_Home::F10
+Launch_App2::F12
 
 ; --- Functions ---
 
