@@ -3,7 +3,21 @@
 pressedKeys := Map()
 vk_down := false
 is_hotkey_mode := false
+is_hotkey_mode_fn := false
+func_keys := Map()
 
+func_keys["F1"] := "Launch_Media"
+func_keys["F2"] := "Volume_Down"
+func_keys["F3"] := "Volume_Up"
+func_keys["F4"] := "Volume_Mute"
+func_keys["F5"] := "Media_Stop"
+func_keys["F6"] := "Media_Prev"
+func_keys["F7"] := "Media_Play_Pause"
+func_keys["F8"] := "Media_Next"
+func_keys["F9"] := "Launch_Mail"
+func_keys["F10"] := "Browser_Home"
+func_keys["F11"] := "F11"
+func_keys["F12"] := "Launch_App2"
 ; Hook all keyboard input
 InstallKeybdHook()
 
@@ -53,18 +67,18 @@ InstallKeybdHook()
 *0::KeyDown("0")
 
 ; Function keys
-*F1::KeyDown("F1")
-*F2::KeyDown("F2")
-*F3::KeyDown("F3")
-*F4::KeyDown("F4")
-*F5::KeyDown("F5")
-*F6::KeyDown("F6")
-*F7::KeyDown("F7")
-*F8::KeyDown("F8")
-*F9::KeyDown("F9")
-*F10::KeyDown("F10")
-*F11::KeyDown("F11")
-*F12::KeyDown("F12")
+*F1::FuncKeyDown("F1")
+*F2::FuncKeyDown("F2")
+*F3::FuncKeyDown("F3")
+*F4::FuncKeyDown("F4")
+*F5::FuncKeyDown("F5")
+*F6::FuncKeyDown("F6")
+*F7::FuncKeyDown("F7")
+*F8::FuncKeyDown("F8")
+*F9::FuncKeyDown("F9")
+*F10::FuncKeyDown("F10")
+*F11::FuncKeyDown("F11")
+*F12::FuncKeyDown("F12")
 
 ; Modifiers
 ~*Shift::KeyDown("Shift")
@@ -183,18 +197,18 @@ InstallKeybdHook()
 *0 up::KeyUp("0")
 
 ; Function keys
-*F1 up::KeyUp("F1")
-*F2 up::KeyUp("F2")
-*F3 up::KeyUp("F3")
-*F4 up::KeyUp("F4")
-*F5 up::KeyUp("F5")
-*F6 up::KeyUp("F6")
-*F7 up::KeyUp("F7")
-*F8 up::KeyUp("F8")
-*F9 up::KeyUp("F9")
-*F10 up::KeyUp("F10")
-*F11 up::KeyUp("F11")
-*F12 up::KeyUp("F12")
+*F1 up::FuncKeyUp("F1")
+*F2 up::FuncKeyUp("F2")
+*F3 up::FuncKeyUp("F3")
+*F4 up::FuncKeyUp("F4")
+*F5 up::FuncKeyUp("F5")
+*F6 up::FuncKeyUp("F6")
+*F7 up::FuncKeyUp("F7")
+*F8 up::FuncKeyUp("F8")
+*F9 up::FuncKeyUp("F9")
+*F10 up::FuncKeyUp("F10")
+*F11 up::FuncKeyUp("F11")
+*F12 up::FuncKeyUp("F12")
 
 ; Modifiers
 ~*Shift up::KeyUp("Shift")
@@ -318,6 +332,28 @@ KeyDown(key) {
         Send "{LWin down}"
     }
     Send "{" key " down}"
+}
+
+FuncKeyDown(key) {
+    global is_hotkey_mode_fn, func_keys
+    if (!checkIsHotkey()) {
+        Send "{" func_keys[key] " down}"
+    }
+    else {
+        is_hotkey_mode_fn := true
+        KeyDown(key)
+    }
+}
+
+FuncKeyUp(key) {
+    global is_hotkey_mode_fn, func_keys
+    if (is_hotkey_mode_fn) {
+        is_hotkey_mode_fn := false
+        KeyUp(key)
+    }
+    else {
+        Send "{" func_keys[key] " up}"
+    }
 }
 
 checkIsHotkey() {
