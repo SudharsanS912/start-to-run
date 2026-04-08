@@ -1,0 +1,327 @@
+#Requires AutoHotkey v2.0
+
+pressedKeys := Map()
+vk_down := false
+is_hotkey_mode := false
+
+; Hook all keyboard input
+InstallKeybdHook()
+
+; --- Key down handler ---
+; =========================
+; KEY DOWN HOTKEYS
+; =========================
+
+; Letters
+*a::KeyDown("a")
+*b::KeyDown("b")
+*c::KeyDown("c")
+*d::KeyDown("d")
+*e::KeyDown("e")
+*f::KeyDown("f")
+*g::KeyDown("g")
+*h::KeyDown("h")
+*i::KeyDown("i")
+*j::KeyDown("j")
+*k::KeyDown("k")
+*l::KeyDown("l")
+*m::KeyDown("m")
+*n::KeyDown("n")
+*o::KeyDown("o")
+*p::KeyDown("p")
+*q::KeyDown("q")
+*r::KeyDown("r")
+*s::KeyDown("s")
+*t::KeyDown("t")
+*u::KeyDown("u")
+*v::KeyDown("v")
+*w::KeyDown("w")
+*x::KeyDown("x")
+*y::KeyDown("y")
+*z::KeyDown("z")
+
+; Number row
+*1::KeyDown("1")
+*2::KeyDown("2")
+*3::KeyDown("3")
+*4::KeyDown("4")
+*5::KeyDown("5")
+*6::KeyDown("6")
+*7::KeyDown("7")
+*8::KeyDown("8")
+*9::KeyDown("9")
+*0::KeyDown("0")
+
+; Function keys
+*F1::KeyDown("F1")
+*F2::KeyDown("F2")
+*F3::KeyDown("F3")
+*F4::KeyDown("F4")
+*F5::KeyDown("F5")
+*F6::KeyDown("F6")
+*F7::KeyDown("F7")
+*F8::KeyDown("F8")
+*F9::KeyDown("F9")
+*F10::KeyDown("F10")
+*F11::KeyDown("F11")
+*F12::KeyDown("F12")
+
+; Modifiers
+~*Shift::KeyDown("Shift")
+~*Ctrl::KeyDown("Ctrl")
+~*Alt::KeyDown("Alt")
+~*LShift::KeyDown("LShift")
+~*RShift::KeyDown("RShift")
+~*LCtrl::KeyDown("LCtrl")
+~*RCtrl::KeyDown("RCtrl")
+~*LAlt::KeyDown("LAlt")
+~*RAlt::KeyDown("RAlt")
+~*CapsLock::KeyDown("CapsLock")
+
+; Special keys
+*Esc::KeyDown("Esc")
+*Tab::KeyDown("Tab")
+*Enter::KeyDown("Enter")
+*Space::KeyDown("Space")
+*Backspace::KeyDown("Backspace")
+*Delete::KeyDown("Delete")
+*Insert::KeyDown("Insert")
+*PrintScreen::KeyDown("PrintScreen")
+*Pause::KeyDown("Pause")
+*ScrollLock::KeyDown("ScrollLock")
+*NumLock::KeyDown("NumLock")
+*AppsKey::KeyDown("AppsKey")
+
+; Navigation keys
+*Up::KeyDown("Up")
+*Down::KeyDown("Down")
+*Left::KeyDown("Left")
+*Right::KeyDown("Right")
+*Home::KeyDown("Home")
+*End::KeyDown("End")
+*PgUp::KeyDown("PgUp")
+*PgDn::KeyDown("PgDn")
+
+; Numpad keys
+*Numpad0::KeyDown("Numpad0")
+*Numpad1::KeyDown("Numpad1")
+*Numpad2::KeyDown("Numpad2")
+*Numpad3::KeyDown("Numpad3")
+*Numpad4::KeyDown("Numpad4")
+*Numpad5::KeyDown("Numpad5")
+*Numpad6::KeyDown("Numpad6")
+*Numpad7::KeyDown("Numpad7")
+*Numpad8::KeyDown("Numpad8")
+*Numpad9::KeyDown("Numpad9")
+*NumpadDot::KeyDown("NumpadDot")
+*NumpadDiv::KeyDown("NumpadDiv")
+*NumpadMult::KeyDown("NumpadMult")
+*NumpadAdd::KeyDown("NumpadAdd")
+*NumpadSub::KeyDown("NumpadSub")
+*NumpadEnter::KeyDown("NumpadEnter")
+
+; Symbols / punctuation
+*`::KeyDown("``")
+*-::KeyDown("-")
+*=::KeyDown("=")
+*[::KeyDown("[")
+*]::KeyDown("]")
+*\::KeyDown("\")
+*`;::KeyDown(";")
+*'::KeyDown("'")
+*,::KeyDown(",")
+*.::KeyDown(".")
+*/::KeyDown("/")
+
+
+; Your trigger key
+~*VKE8::VKDown()
+
+
+; =========================
+; KEY UP HOTKEYS
+; =========================
+
+; Letters
+*a up::KeyUp("a")
+*b up::KeyUp("b")
+*c up::KeyUp("c")
+*d up::KeyUp("d")
+*e up::KeyUp("e")
+*f up::KeyUp("f")
+*g up::KeyUp("g")
+*h up::KeyUp("h")
+*i up::KeyUp("i")
+*j up::KeyUp("j")
+*k up::KeyUp("k")
+*l up::KeyUp("l")
+*m up::KeyUp("m")
+*n up::KeyUp("n")
+*o up::KeyUp("o")
+*p up::KeyUp("p")
+*q up::KeyUp("q")
+*r up::KeyUp("r")
+*s up::KeyUp("s")
+*t up::KeyUp("t")
+*u up::KeyUp("u")
+*v up::KeyUp("v")
+*w up::KeyUp("w")
+*x up::KeyUp("x")
+*y up::KeyUp("y")
+*z up::KeyUp("z")
+
+; Number row
+*1 up::KeyUp("1")
+*2 up::KeyUp("2")
+*3 up::KeyUp("3")
+*4 up::KeyUp("4")
+*5 up::KeyUp("5")
+*6 up::KeyUp("6")
+*7 up::KeyUp("7")
+*8 up::KeyUp("8")
+*9 up::KeyUp("9")
+*0 up::KeyUp("0")
+
+; Function keys
+*F1 up::KeyUp("F1")
+*F2 up::KeyUp("F2")
+*F3 up::KeyUp("F3")
+*F4 up::KeyUp("F4")
+*F5 up::KeyUp("F5")
+*F6 up::KeyUp("F6")
+*F7 up::KeyUp("F7")
+*F8 up::KeyUp("F8")
+*F9 up::KeyUp("F9")
+*F10 up::KeyUp("F10")
+*F11 up::KeyUp("F11")
+*F12 up::KeyUp("F12")
+
+; Modifiers
+~*Shift up::KeyUp("Shift")
+~*Ctrl up::KeyUp("Ctrl")
+~*Alt up::KeyUp("Alt")
+~*LShift up::KeyUp("LShift")
+~*RShift up::KeyUp("RShift")
+~*LCtrl up::KeyUp("LCtrl")
+~*RCtrl up::KeyUp("RCtrl")
+~*LAlt up::KeyUp("LAlt")
+~*RAlt up::KeyUp("RAlt")
+~*CapsLock up::KeyUp("CapsLock")
+
+; Special keys
+*Esc up::KeyUp("Esc")
+*Tab up::KeyUp("Tab")
+*Enter up::KeyUp("Enter")
+*Space up::KeyUp("Space")
+*Backspace up::KeyUp("Backspace")
+*Delete up::KeyUp("Delete")
+*Insert up::KeyUp("Insert")
+*PrintScreen up::KeyUp("PrintScreen")
+*Pause up::KeyUp("Pause")
+*ScrollLock up::KeyUp("ScrollLock")
+*NumLock up::KeyUp("NumLock")
+*AppsKey up::KeyUp("AppsKey")
+
+; Navigation keys
+*Up up::KeyUp("Up")
+*Down up::KeyUp("Down")
+*Left up::KeyUp("Left")
+*Right up::KeyUp("Right")
+*Home up::KeyUp("Home")
+*End up::KeyUp("End")
+*PgUp up::KeyUp("PgUp")
+*PgDn up::KeyUp("PgDn")
+
+; Numpad keys
+*Numpad0 up::KeyUp("Numpad0")
+*Numpad1 up::KeyUp("Numpad1")
+*Numpad2 up::KeyUp("Numpad2")
+*Numpad3 up::KeyUp("Numpad3")
+*Numpad4 up::KeyUp("Numpad4")
+*Numpad5 up::KeyUp("Numpad5")
+*Numpad6 up::KeyUp("Numpad6")
+*Numpad7 up::KeyUp("Numpad7")
+*Numpad8 up::KeyUp("Numpad8")
+*Numpad9 up::KeyUp("Numpad9")
+*NumpadDot up::KeyUp("NumpadDot")
+*NumpadDiv up::KeyUp("NumpadDiv")
+*NumpadMult up::KeyUp("NumpadMult")
+*NumpadAdd up::KeyUp("NumpadAdd")
+*NumpadSub up::KeyUp("NumpadSub")
+*NumpadEnter up::KeyUp("NumpadEnter")
+
+; Symbols / punctuation
+*` up::KeyUp("``")
+*- up::KeyUp("-")
+*= up::KeyUp("=")
+*[ up::KeyUp("[")
+*] up::KeyUp("]")
+*\ up::KeyUp("\")
+*`; up::KeyUp(";")
+*' up::KeyUp("'")
+*, up::KeyUp(",")
+*. up::KeyUp(".")
+*/ up::KeyUp("/")
+
+; Your trigger key
+~*VKE8 up::VKUp()
+
+
+
+; --- Functions ---
+
+
+VKUp() {
+    global vk_down, is_hotkey_mode
+    if (!vk_down) {
+        return
+    }
+    vk_down := false
+
+    Send "{LWin up}"
+    if (is_hotkey_mode) {
+        is_hotkey_mode := false
+        return
+    }
+    else {
+        Send("{Ctrl down}{Alt down}{Shift down}")
+        Send("/")
+        Send("{Shift up}{Alt up}{Ctrl up}")
+    }
+}
+
+VKDown() {
+    global vk_down, is_hotkey_mode
+    vk_down := true
+    if (checkIsHotkey()) {
+        is_hotkey_mode := true
+        Send "{LWin down}"
+    }
+}
+
+KeyUp(key) {
+    global pressedKeys
+    pressedKeys.Delete(key)
+    Send "{" key " up}"
+}
+
+KeyDown(key) {
+    global pressedKeys, vk_down, is_hotkey_mode
+    pressedKeys[key] := true
+    if (vk_down) {
+        is_hotkey_mode := true
+        Send "{LWin down}"
+    }
+    Send "{" key " down}"
+}
+
+checkIsHotkey() {
+    global pressedKeys
+    isHotkey := false
+    for k, v in pressedKeys{
+        if (v){
+            isHotkey := true
+        }
+    }
+    return isHotkey
+}
