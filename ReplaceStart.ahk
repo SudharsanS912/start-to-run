@@ -317,7 +317,23 @@ KeyDown(key) {
         is_hotkey_mode := true
         Send "{LWin down}"
     }
-    Send "{" key " down}"
+    Send "{" FormatKey(key) " down}"
+}
+FormatKey(key) {
+    ; Check if it's a single alphabet letter
+    if RegExMatch(key, "^[a-zA-Z]$") {
+        caps := GetKeyState("CapsLock", "T")
+        shift := GetKeyState("Shift")
+
+        ; XOR logic (normal keyboard behavior)
+        if (caps != shift)
+            return StrUpper(key)
+        else
+            return StrLower(key)
+    }
+
+    ; Not a letter → return as-is
+    return key
 }
 
 checkIsHotkey() {
