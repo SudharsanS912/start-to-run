@@ -353,18 +353,21 @@ KeyDown(key) {
     Send "{" FormatKey(key) " down}"
 }
 FormatKey(key) {
-    ; Check if it's a single alphabet letter
-    if RegExMatch(key, "^[a-zA-Z]$") {
-        caps := GetKeyState("CapsLock", "T")
-        shift := GetKeyState("Shift")
-
-        ; XOR logic (normal keyboard behavior)
-        if (caps != shift)
-            return StrUpper(key)
-        else
-            return StrLower(key)
+    ; Check if we're in hotkey mode - if so, return the key as-is (except for function keys)
+    if (!checkIsHotkey()){
+        ; Check if it's a single alphabet letter
+        if RegExMatch(key, "^[a-zA-Z]$") {
+            caps := GetKeyState("CapsLock", "T")
+            shift := GetKeyState("Shift")
+            
+            ; XOR logic (normal keyboard behavior)
+            if (caps != shift)
+                return StrUpper(key)
+            else
+                return StrLower(key)
+        }
     }
-
+        
     ; Not a letter → return as-is
     return key
 }

@@ -10,13 +10,6 @@ The script now works **directly with the Windows key** and **does not require Po
 
 It also uses a **higher input hook priority** for better compatibility with applications that may otherwise intercept the Windows key.
 
-> Note:
-> This README is not fully  maintained for this branch (Except the list of additional features in this callout). This branch includes additional features targetting different hotkey combinations.
-> You are free to modify and use on your environment as per your needs
->
-> **List of additional features: **
-> - Function key presses trigger special keys, while hotkeys using them will register as is
-
 > **Important:** Run the script **as Administrator** to allow the highest possible input hook priority and improve compatibility across elevated or input-heavy applications.
 
 ---
