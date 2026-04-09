@@ -6,6 +6,8 @@ is_hotkey_mode := false
 
 ; Hook all keyboard input
 InstallKeybdHook()
+#InputLevel 1
+#UseHook
 
 ; --- Key down handler ---
 ; =========================
@@ -135,7 +137,8 @@ InstallKeybdHook()
 
 
 ; Your trigger key
-~*VKE8::VKDown()
+*LWin::VKDown()
+*RWin::VKDown()
 
 
 ; =========================
@@ -264,7 +267,8 @@ InstallKeybdHook()
 */ up::KeyUp("/")
 
 ; Your trigger key
-~*VKE8 up::VKUp()
+*LWin::VKDown()
+*RWin::VKDown()
 
 
 
