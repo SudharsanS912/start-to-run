@@ -1,7 +1,7 @@
 #Requires AutoHotkey v2.0
 
-pressedKeys := Map()
-vk_down := false
+pressedModifiers := Map()
+win_down := false
 is_hotkey_mode := false
 is_hotkey_mode_fn := false
 
@@ -70,16 +70,16 @@ InstallKeybdHook()
 *F12::FuncKeyDown("F12")
 
 ; Modifiers
-~*Shift::KeyDown("Shift")
-~*Ctrl::KeyDown("Ctrl")
-~*Alt::KeyDown("Alt")
-~*LShift::KeyDown("LShift")
-~*RShift::KeyDown("RShift")
-~*LCtrl::KeyDown("LCtrl")
-~*RCtrl::KeyDown("RCtrl")
-~*LAlt::KeyDown("LAlt")
-~*RAlt::KeyDown("RAlt")
-~*CapsLock::KeyDown("CapsLock")
+~*Shift::ModifierDown("Shift")
+~*Ctrl::ModifierDown("Ctrl")
+~*Alt::ModifierDown("Alt")
+~*LShift::ModifierDown("LShift")
+~*RShift::ModifierDown("RShift")
+~*LCtrl::ModifierDown("LCtrl")
+~*RCtrl::ModifierDown("RCtrl")
+~*LAlt::ModifierDown("LAlt")
+~*RAlt::ModifierDown("RAlt")
+~*CapsLock::ModifierDown("CapsLock")
 
 ; Special keys
 *Esc::KeyDown("Esc")
@@ -137,9 +137,9 @@ InstallKeybdHook()
 */::KeyDown("/")
 
 
-; Your trigger key
-*LWin::VKDown()
-*RWin::VKDown()
+; Win key
+*LWin::WinDown()
+*RWin::WinDown()
 
 
 ; =========================
@@ -201,16 +201,16 @@ InstallKeybdHook()
 *F12 up::FuncKeyUp("F12")
 
 ; Modifiers
-~*Shift up::KeyUp("Shift")
-~*Ctrl up::KeyUp("Ctrl")
-~*Alt up::KeyUp("Alt")
-~*LShift up::KeyUp("LShift")
-~*RShift up::KeyUp("RShift")
-~*LCtrl up::KeyUp("LCtrl")
-~*RCtrl up::KeyUp("RCtrl")
-~*LAlt up::KeyUp("LAlt")
-~*RAlt up::KeyUp("RAlt")
-~*CapsLock up::KeyUp("CapsLock")
+~*Shift up::ModifierUp("Shift")
+~*Ctrl up::ModifierUp("Ctrl")
+~*Alt up::ModifierUp("Alt")
+~*LShift up::ModifierUp("LShift")
+~*RShift up::ModifierUp("RShift")
+~*LCtrl up::ModifierUp("LCtrl")
+~*RCtrl up::ModifierUp("RCtrl")
+~*LAlt up::ModifierUp("LAlt")
+~*RAlt up::ModifierUp("RAlt")
+~*CapsLock up::ModifierUp("CapsLock")
 
 ; Special keys
 *Esc up::KeyUp("Esc")
@@ -267,9 +267,9 @@ InstallKeybdHook()
 *. up::KeyUp(".")
 */ up::KeyUp("/")
 
-; Your trigger key
-*LWin::VKDown()
-*RWin::VKDown()
+; Win key
+*LWin up::WinUp()
+*RWin up::WinUp()
 
 ; =========================
 
@@ -304,12 +304,12 @@ Launch_App2::F12
 ; --- Functions ---
 
 
-VKUp() {
-    global vk_down, is_hotkey_mode
-    if (!vk_down) {
+WinUp() {
+    global win_down, is_hotkey_mode
+    if (!win_down) {
         return
     }
-    vk_down := false
+    win_down := false
 
     Send "{LWin up}"
     if (is_hotkey_mode) {
@@ -323,35 +323,44 @@ VKUp() {
     }
 }
 
-VKDown() {
-    global vk_down, is_hotkey_mode
-    vk_down := true
+WinDown() {
+    global win_down, is_hotkey_mode
+    win_down := true
     if (checkIsHotkey()) {
         is_hotkey_mode := true
         Send "{LWin down}"
     }
 }
 
-KeyUp(key) {
-    global pressedKeys
+ModifierUp(key) {
+    global pressedModifiers
     try {
-        pressedKeys.Delete(key)
+        pressedModifiers.Delete(key)
     }
     catch {
         ; Key wasn't in the map, ignore
     }
+    KeyUp(key)
+}
+
+KeyUp(key) {
     Send "{" key " up}"
 }
 
-KeyDown(key) {
-    global pressedKeys, vk_down, is_hotkey_mode
-    pressedKeys[key] := true
-    if (vk_down) {
+ModifierDown(key) {
+    global pressedModifiers, win_down, is_hotkey_mode
+    pressedModifiers[key] := true
+    if (win_down) {
         is_hotkey_mode := true
         Send "{LWin down}"
     }
+    KeyDown(key)
+}
+
+KeyDown(key) {
     Send "{" FormatKey(key) " down}"
 }
+
 FormatKey(key) {
     ; Check if we're in hotkey mode - if so, return the key as-is (except for function keys)
     if (!checkIsHotkey()){
@@ -371,10 +380,9 @@ FormatKey(key) {
     ; Not a letter → return as-is
     return key
 }
-
 FuncKeyDown(key) {
-    global is_hotkey_mode_fn, func_keys
-    if (!checkIsHotkey()) {
+    global is_hotkey_mode_fn, func_keys, win_down
+    if (!checkIsHotkey() && !win_down) {
         if (InStr(func_keys[key], "\\")) {
             Send SubStr(func_keys[key], 3)
         }
@@ -400,9 +408,9 @@ FuncKeyUp(key) {
 }
 
 checkIsHotkey() {
-    global pressedKeys
-    isHotkey := false
-    for k, v in pressedKeys{
+    global pressedModifiers
+    isHotkey := win_down
+    for k, v in pressedModifiers{
         if (v){
             isHotkey := true
         }
