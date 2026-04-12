@@ -350,14 +350,15 @@ KeyUp(key) {
 ModifierDown(key) {
     global pressedModifiers, win_down, is_hotkey_mode
     pressedModifiers[key] := true
-    if (win_down) {
-        is_hotkey_mode := true
-        Send "{LWin down}"
-    }
     KeyDown(key)
 }
 
 KeyDown(key) {
+    global win_down, is_hotkey_mode
+    if (win_down) {
+        is_hotkey_mode := true
+        Send "{LWin down}"
+    }
     Send "{" FormatKey(key) " down}"
 }
 
@@ -409,7 +410,7 @@ FuncKeyUp(key) {
 
 checkIsHotkey() {
     global pressedModifiers
-    isHotkey := win_down
+    isHotkey := false
     for k, v in pressedModifiers{
         if (v){
             isHotkey := true
