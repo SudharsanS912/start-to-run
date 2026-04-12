@@ -333,9 +333,9 @@ WinDown() {
 }
 
 ModifierUp(key) {
-    global pressedKeys
+    global pressedModifiers
     try {
-        pressedKeys.Delete(key)
+        pressedModifiers.Delete(key)
     }
     catch {
         ; Key wasn't in the map, ignore
@@ -348,8 +348,8 @@ KeyUp(key) {
 }
 
 ModifierDown(key) {
-    global pressedKeys, win_down, is_hotkey_mode
-    pressedKeys[key] := true
+    global pressedModifiers, win_down, is_hotkey_mode
+    pressedModifiers[key] := true
     if (win_down) {
         is_hotkey_mode := true
         Send "{LWin down}"
@@ -382,9 +382,9 @@ FormatKey(key) {
 }
 
 checkIsHotkey() {
-    global pressedKeys
-    isHotkey := false
-    for k, v in pressedKeys{
+    global pressedModifiers
+    isHotkey := win_down
+    for k, v in pressedModifiers{
         if (v){
             isHotkey := true
         }
