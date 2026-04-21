@@ -1,5 +1,8 @@
 #Requires AutoHotkey v2.0
 
+; ========= Explicit refresh frequency ===========
+updateFrequency := 200 ; every 200 ms (tweak as needed)
+
 ; ============ Win Key Swap ============
 ; Define the action to perform when the Win key is pressed without any other modifiers
 WinKeyAction() {
@@ -8,6 +11,41 @@ WinKeyAction() {
     Send("{Shift up}{Alt up}{Ctrl up}")
 }
 
+; ========= Code ===========
+
+; Explicit refresh Function
+
+CheckPhysicalKeys() {
+    global pressedKeys, pressedModifiers, shift_down, win_down
+
+    ; --- Fix normal keys ---
+    for key, _ in pressedKeys.Clone() {
+        if !GetKeyState(key, "P") {
+            Send "{" key " up}"
+            pressedKeys.Delete(key)
+        }
+    }
+
+    ; --- Fix Shift state ---
+    if (shift_down && !GetKeyState("Shift", "P")) {
+        shift_down := false
+        Send "{Shift up}"
+    }
+
+    ; --- Fix Win key state ---
+    if (win_down && !GetKeyState("LWin", "P") && !GetKeyState("RWin", "P")) {
+        win_down := false
+        Send "{LWin up}"
+    }
+
+    ; --- Fix modifiers map (Ctrl / Alt) ---
+    for mod, _ in pressedModifiers.Clone() {
+        if !GetKeyState(mod, "P") {
+            Send "{" mod " up}"
+            pressedModifiers.Delete(mod)
+        }
+    }
+}
 ; ===========Additional Features==============
 
 ; --- Function keys swap ---
@@ -42,6 +80,7 @@ Launch_App2::F12
 
 ; State variables and Objects
 pressedModifiers := Map()
+pressedKeys := Map()
 win_down := false
 shift_down := false
 is_hotkey_mode := false
@@ -49,8 +88,10 @@ is_hotkey_mode_fn := false
 
 ; Hook all keyboard input
 InstallKeybdHook()
+SetTimer(CheckPhysicalKeys, updateFrequency)
 #InputLevel 1
 #UseHook
+#MaxHotkeysPerInterval 0
 
 ; --- Key down handler ---
 ; =========================
@@ -344,6 +385,8 @@ ModifierUp(key) {
 }
 
 KeyUp(key) {
+    global pressedKeys
+    pressedKeys.Delete(key)
     Send "{" key " up}"
 }
 
@@ -367,6 +410,8 @@ KeyDown(key) {
 }
 
 _KeyDown(key) {
+    global pressedKeys
+    pressedKeys[key] := true
     Send "{" FormatKey(key) " down}"
 }
 
