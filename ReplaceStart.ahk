@@ -59,6 +59,7 @@ InstallKeybdHook()
 SetTimer(CheckPhysicalKeys, updateFrequency)
 #InputLevel 1
 #UseHook
+#MaxHotkeysPerInterval 0
 
 ; --- Key down handler ---
 ; =========================
