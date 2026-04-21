@@ -10,42 +10,6 @@ WinKeyAction() {
     Send("/")
     Send("{Shift up}{Alt up}{Ctrl up}")
 }
-
-; ========= Code ===========
-
-; Explicit refresh Function
-
-CheckPhysicalKeys() {
-    global pressedKeys, pressedModifiers, shift_down, win_down
-
-    ; --- Fix normal keys ---
-    for key, _ in pressedKeys.Clone() {
-        if !GetKeyState(key, "P") {
-            Send "{" key " up}"
-            pressedKeys.Delete(key)
-        }
-    }
-
-    ; --- Fix Shift state ---
-    if (shift_down && !GetKeyState("Shift", "P")) {
-        shift_down := false
-        Send "{Shift up}"
-    }
-
-    ; --- Fix Win key state ---
-    if (win_down && !GetKeyState("LWin", "P") && !GetKeyState("RWin", "P")) {
-        win_down := false
-        Send "{LWin up}"
-    }
-
-    ; --- Fix modifiers map (Ctrl / Alt) ---
-    for mod, _ in pressedModifiers.Clone() {
-        if !GetKeyState(mod, "P") {
-            Send "{" mod " up}"
-            pressedModifiers.Delete(mod)
-        }
-    }
-}
 ; ===========Additional Features==============
 
 ; --- Function keys swap ---
@@ -76,7 +40,60 @@ Launch_Mail::F9
 Browser_Home::F10
 Launch_App2::F12
 
-; ================================
+; ========= Code ===========
+
+; Explicit refresh Function
+
+CheckPhysicalKeys() {
+    global pressedKeys, pressedModifiers, shift_down, win_down, func_keys
+
+    ; --- Fix normal + function keys ---
+    for key, _ in pressedKeys.Clone() {
+
+        physKey := key
+
+        if !GetKeyState(physKey, "P") {
+
+            ; --- handle function key mappings ---
+            if (func_keys.Has(key) && !checkIsHotkey() && !win_down) {
+                mapped := func_keys[key]
+
+                if !InStr(mapped, "\\") {
+                    Send "{" mapped " up}"
+                }
+                ; if it was a direct send (like "#g"), no "up" needed
+            }
+            else {
+                Send "{" key " up}"
+            }
+            if pressedKeys.Has(key){
+                pressedKeys.Delete(key)
+            }
+        }
+    }
+
+    ; --- Fix Shift state ---
+    if (shift_down && !GetKeyState("Shift", "P")) {
+        shift_down := false
+        Send "{Shift up}"
+    }
+
+    ; --- Fix Win key state ---
+    if (win_down && !GetKeyState("LWin", "P") && !GetKeyState("RWin", "P")) {
+        win_down := false
+        Send "{LWin up}"
+    }
+
+    ; --- Fix modifiers map (Ctrl / Alt) ---
+    for mod, _ in pressedModifiers.Clone() {
+        if !GetKeyState(mod, "P") {
+            Send "{" mod " up}"
+            if pressedModifiers.Has(mod) {
+                pressedModifiers.Delete(mod)
+            }
+        }
+    }
+}
 
 ; State variables and Objects
 pressedModifiers := Map()
@@ -91,7 +108,6 @@ InstallKeybdHook()
 SetTimer(CheckPhysicalKeys, updateFrequency)
 #InputLevel 1
 #UseHook
-#MaxHotkeysPerInterval 0
 
 ; --- Key down handler ---
 ; =========================
@@ -380,13 +396,17 @@ WinDown() {
 ModifierUp(key) {
     global pressedModifiers
     key := RegExReplace(key, "^(L|R)")
-    pressedModifiers.Delete(key)
+    if pressedModifiers.Has(key) {
+        pressedModifiers.Delete(key)
+    }
     KeyUp(key)
 }
 
 KeyUp(key) {
     global pressedKeys
-    pressedKeys.Delete(key)
+    if pressedKeys.Has(key) {
+        pressedKeys.Delete(key)
+    }
     Send "{" key " up}"
 }
 
@@ -449,7 +469,7 @@ FuncKeyDown(key) {
             Send SubStr(func_keys[key], 3)
         }
         else {
-            Send "{" func_keys[key] " down}"
+            _KeyDown(func_keys[key])
         }
     }
     else {
@@ -465,7 +485,7 @@ FuncKeyUp(key) {
         KeyUp(key)
     }
     else {
-        Send "{" func_keys[key] " up}"
+        KeyUp(func_keys[key])
     }
 }
 _checkIsHotkey() {
