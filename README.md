@@ -1,5 +1,13 @@
 # Win Key Remap for PowerToys Run
 ## start-to-run
+
+> Note:
+> This README is not fully  maintained for this branch (Except the list of additional features in this callout). This branch includes additional features targetting different hotkey combinations.
+> You are free to modify and use on your environment as per your needs
+>
+> **List of additional features: **
+> - Function key presses trigger special keys, while hotkeys using them will register as is
+
 An AutoHotkey v2 script that makes:
 This AutoHotkey script changes the behavior of the **Left Windows key**:
 
